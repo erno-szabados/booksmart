@@ -1,0 +1,23 @@
+[project]
+name = "booksmart"
+version = "0.1.0"
+description = "Local hierarchical book summarization and analysis with LangChain, Chainlit, and llama.cpp"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+	"chainlit>=2.0.0",
+	"chromadb>=0.5.0",
+	"langchain>=0.3.0",
+	"langchain-chroma>=0.2.0",
+	"langchain-classic>=1.0.3",
+	"langchain-openai>=0.3.0",
+	"langchain-text-splitters>=0.3.0",
+	"pyyaml>=6.0.2",
+]
+
+[project.scripts]
+booksmart = "booksmart.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
