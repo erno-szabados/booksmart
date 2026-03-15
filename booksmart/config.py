@@ -8,11 +8,50 @@ from typing import Any
 
 import yaml
 
-DEFAULT_LLM_BASE_URL = "http://localhost:8001/v1"
-DEFAULT_EMBEDDING_BASE_URL = "http://localhost:8002/v1"
-DEFAULT_API_KEY = "local-token"
-DEFAULT_MODEL = "local-chat-model"
-DEFAULT_EMBEDDING_MODEL = "local-embedding-model"
+
+def _load_dotenv_file() -> None:
+    """Load a simple .env file into os.environ for missing keys.
+
+    Looks for a path specified by BOOKSMART_DOTENV_PATH (relative or absolute),
+    otherwise searches for `.env` in the current working directory and the
+    repository root (two parents up from this file).
+    """
+    env_name = os.environ.get("BOOKSMART_DOTENV_PATH", ".env")
+    candidates = [Path(env_name), Path.cwd() / env_name, Path(__file__).resolve().parents[2] / env_name]
+    for p in candidates:
+        try:
+            p = Path(p)
+        except Exception:
+            continue
+        if not p.exists():
+            continue
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        for line in text.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, val = line.split("=", 1)
+            key = key.strip()
+            val = val.strip().lstrip("\"").lstrip("'\"").rstrip("\"").rstrip("'\"")
+            if key and key not in os.environ:
+                os.environ[key] = val
+        break
+
+
+# Load .env early so the DEFAULT_* values below can read from environment.
+_load_dotenv_file()
+
+
+DEFAULT_LLM_BASE_URL = os.environ.get("BOOKSMART_LLM_BASE_URL", "http://localhost:8001/v1")
+DEFAULT_EMBEDDING_BASE_URL = os.environ.get("BOOKSMART_EMBEDDING_BASE_URL", "http://localhost/v1")
+DEFAULT_API_KEY = os.environ.get("BOOKSMART_API_KEY", "local-token")
+DEFAULT_MODEL = os.environ.get("BOOKSMART_MODEL", "local-chat-model")
+DEFAULT_EMBEDDING_MODEL = os.environ.get("BOOKSMART_EMBEDDING_MODEL", "local-embedding-model")
 DEFAULT_TEMPERATURE = 0.1
 DEFAULT_CHUNK_SIZE_CHARS = 12000
 DEFAULT_CHUNK_OVERLAP_CHARS = 1500
