@@ -8,8 +8,8 @@ from typing import Any
 
 import yaml
 
-DEFAULT_LLM_BASE_URL = "http://192.168.1.1:8001/v1"
-DEFAULT_EMBEDDING_BASE_URL = "http://192.168.1.1:8002/v1"
+DEFAULT_LLM_BASE_URL = "http://localhost:8001/v1"
+DEFAULT_EMBEDDING_BASE_URL = "http://localhost:8002/v1"
 DEFAULT_API_KEY = "local-token"
 DEFAULT_MODEL = "local-chat-model"
 DEFAULT_EMBEDDING_MODEL = "local-embedding-model"

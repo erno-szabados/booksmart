@@ -31,8 +31,8 @@ Copy `booksmart.example.toml` to `booksmart.toml` or set environment variables d
 
 Default endpoints:
 
-- Chat LLM: `http://192.168.1.1:8001/v1`
-- Embeddings: `http://192.168.1.1:8002/v1`
+- Chat LLM: `http://localhost:8001/v1`
+- Embeddings: `http://localhost:8002/v1`
 
 Config values:
 
