@@ -45,6 +45,8 @@ Config values:
 - `temperature`
 - `chunk_size_chars`
 - `chunk_overlap_chars`
+- `embedding_chunk_size_chars`
+- `embedding_chunk_overlap_chars`
 - `retrieval_k`
 - `section_char_budget`
 - `reduce_max_tokens`
@@ -118,3 +120,4 @@ Each processed book is stored under `data/books/<slug>/` with:
 - Input support is intentionally focused on plain text for v1.
 - The implementation assumes OpenAI-compatible llama.cpp endpoints.
 - The section context budget is character-based, which is a pragmatic approximation for local models.
+- Summarization and embeddings now use separate chunk budgets. Keep `chunk_size_chars` large enough for efficient map-reduce summarization, and keep `embedding_chunk_size_chars` small enough for your embedding endpoint's token limit.

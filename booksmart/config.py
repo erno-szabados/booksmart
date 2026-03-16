@@ -55,6 +55,8 @@ DEFAULT_EMBEDDING_MODEL = os.environ.get("BOOKSMART_EMBEDDING_MODEL", "local-emb
 DEFAULT_TEMPERATURE = 0.1
 DEFAULT_CHUNK_SIZE_CHARS = 12000
 DEFAULT_CHUNK_OVERLAP_CHARS = 1500
+DEFAULT_EMBEDDING_CHUNK_SIZE_CHARS = 1500
+DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS = 150
 DEFAULT_RETRIEVAL_K = 4
 DEFAULT_SECTION_CHAR_BUDGET = 120000
 DEFAULT_REDUCE_MAX_TOKENS = 12000
@@ -71,6 +73,8 @@ class AppConfig:
     temperature: float = DEFAULT_TEMPERATURE
     chunk_size_chars: int = DEFAULT_CHUNK_SIZE_CHARS
     chunk_overlap_chars: int = DEFAULT_CHUNK_OVERLAP_CHARS
+    embedding_chunk_size_chars: int = DEFAULT_EMBEDDING_CHUNK_SIZE_CHARS
+    embedding_chunk_overlap_chars: int = DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS
     retrieval_k: int = DEFAULT_RETRIEVAL_K
     section_char_budget: int = DEFAULT_SECTION_CHAR_BUDGET
     reduce_max_tokens: int = DEFAULT_REDUCE_MAX_TOKENS
@@ -100,6 +104,22 @@ class AppConfig:
             temperature=float(_env_or_config("BOOKSMART_TEMPERATURE", file_values, "temperature", DEFAULT_TEMPERATURE)),
             chunk_size_chars=int(_env_or_config("BOOKSMART_CHUNK_SIZE_CHARS", file_values, "chunk_size_chars", DEFAULT_CHUNK_SIZE_CHARS)),
             chunk_overlap_chars=int(_env_or_config("BOOKSMART_CHUNK_OVERLAP_CHARS", file_values, "chunk_overlap_chars", DEFAULT_CHUNK_OVERLAP_CHARS)),
+            embedding_chunk_size_chars=int(
+                _env_or_config(
+                    "BOOKSMART_EMBEDDING_CHUNK_SIZE_CHARS",
+                    file_values,
+                    "embedding_chunk_size_chars",
+                    DEFAULT_EMBEDDING_CHUNK_SIZE_CHARS,
+                )
+            ),
+            embedding_chunk_overlap_chars=int(
+                _env_or_config(
+                    "BOOKSMART_EMBEDDING_CHUNK_OVERLAP_CHARS",
+                    file_values,
+                    "embedding_chunk_overlap_chars",
+                    DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS,
+                )
+            ),
             retrieval_k=int(_env_or_config("BOOKSMART_RETRIEVAL_K", file_values, "retrieval_k", DEFAULT_RETRIEVAL_K)),
             section_char_budget=int(_env_or_config("BOOKSMART_SECTION_CHAR_BUDGET", file_values, "section_char_budget", DEFAULT_SECTION_CHAR_BUDGET)),
             reduce_max_tokens=int(_env_or_config("BOOKSMART_REDUCE_MAX_TOKENS", file_values, "reduce_max_tokens", DEFAULT_REDUCE_MAX_TOKENS)),

@@ -9,6 +9,7 @@ from langchain_classic.chains.summarize import load_summarize_chain
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from .chunking import build_chunks, slugify, split_into_chapters, stable_hash, title_from_source_name
 from .config import AppConfig
@@ -186,7 +187,31 @@ class IngestionPipeline:
             embedding_function=self.embeddings,
         )
         vector_store.reset_collection()
-        vector_store.add_documents(documents)
+        vector_documents = self._embedding_documents(documents)
+        logger.info(
+            "event=ingest.vectorize slug=%s source_docs=%s embedding_docs=%s embedding_chunk_size=%s",
+            slug,
+            len(documents),
+            len(vector_documents),
+            self.config.embedding_chunk_size_chars,
+        )
+        vector_store.add_documents(vector_documents)
+
+    def _embedding_documents(self, documents: list[Document]) -> list[Document]:
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=self.config.embedding_chunk_size_chars,
+            chunk_overlap=self.config.embedding_chunk_overlap_chars,
+            separators=["\n\n", "\n", ". ", " ", ""],
+        )
+
+        vector_documents: list[Document] = []
+        for document in documents:
+            texts = splitter.split_text(document.page_content)
+            for subchunk_index, text in enumerate(texts, start=1):
+                metadata = dict(document.metadata)
+                metadata["embedding_chunk_index"] = subchunk_index
+                vector_documents.append(Document(page_content=text, metadata=metadata))
+        return vector_documents
 
     @staticmethod
     def _notify(progress: ProgressCallback, message: str) -> None:
