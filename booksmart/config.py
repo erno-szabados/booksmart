@@ -60,6 +60,8 @@ DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS = 150
 DEFAULT_RETRIEVAL_K = 4
 DEFAULT_SECTION_CHAR_BUDGET = 120000
 DEFAULT_REDUCE_MAX_TOKENS = 12000
+DEFAULT_CHAT_LLM_BASE_URL = DEFAULT_LLM_BASE_URL
+DEFAULT_CHAT_MODEL = DEFAULT_MODEL
 
 
 @dataclass(slots=True)
@@ -75,6 +77,8 @@ class AppConfig:
     chunk_overlap_chars: int = DEFAULT_CHUNK_OVERLAP_CHARS
     embedding_chunk_size_chars: int = DEFAULT_EMBEDDING_CHUNK_SIZE_CHARS
     embedding_chunk_overlap_chars: int = DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS
+    chat_llm_base_url: str = DEFAULT_CHAT_LLM_BASE_URL
+    chat_model: str = DEFAULT_CHAT_MODEL
     retrieval_k: int = DEFAULT_RETRIEVAL_K
     section_char_budget: int = DEFAULT_SECTION_CHAR_BUDGET
     reduce_max_tokens: int = DEFAULT_REDUCE_MAX_TOKENS
@@ -120,6 +124,8 @@ class AppConfig:
                     DEFAULT_EMBEDDING_CHUNK_OVERLAP_CHARS,
                 )
             ),
+            chat_llm_base_url=str(_env_or_config("BOOKSMART_CHAT_LLM_BASE_URL", file_values, "chat_llm_base_url", DEFAULT_CHAT_LLM_BASE_URL)),
+            chat_model=str(_env_or_config("BOOKSMART_CHAT_MODEL", file_values, "chat_model", DEFAULT_CHAT_MODEL)),
             retrieval_k=int(_env_or_config("BOOKSMART_RETRIEVAL_K", file_values, "retrieval_k", DEFAULT_RETRIEVAL_K)),
             section_char_budget=int(_env_or_config("BOOKSMART_SECTION_CHAR_BUDGET", file_values, "section_char_budget", DEFAULT_SECTION_CHAR_BUDGET)),
             reduce_max_tokens=int(_env_or_config("BOOKSMART_REDUCE_MAX_TOKENS", file_values, "reduce_max_tokens", DEFAULT_REDUCE_MAX_TOKENS)),

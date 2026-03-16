@@ -47,6 +47,8 @@ Config values:
 - `chunk_overlap_chars`
 - `embedding_chunk_size_chars`
 - `embedding_chunk_overlap_chars`
+- `chat_llm_base_url`
+- `chat_model`
 - `retrieval_k`
 - `section_char_budget`
 - `reduce_max_tokens`

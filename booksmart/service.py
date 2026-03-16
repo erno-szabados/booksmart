@@ -51,7 +51,9 @@ class BookAnalystService:
         self.store = BookStore(config.books_dir)
         self.ingestion = IngestionPipeline(config, self.store)
         self.retriever = BookContextRetriever(config, self.store)
-        self.llm = build_chat_model(config)
+        # Use an optionally smaller chat model for interactive Q&A while keeping
+        # the ingestion/summarization model unchanged.
+        self.llm = build_chat_model(config, model=config.chat_model, base_url=config.chat_llm_base_url)
 
     def ingest_from_path(self, path: str | Path, force_rebuild: bool = True, progress=None):
         self._assert_ingestion_dependencies()
@@ -111,7 +113,8 @@ class BookAnalystService:
         self._assert_embedding_dependency()
 
     def _assert_analysis_dependencies(self) -> None:
-        self._assert_chat_dependency()
+        # For analysis/chat, ensure the configured chat LLM endpoint is reachable
+        _assert_endpoint_available(self.config.chat_llm_base_url, "Chat LLM")
         self._assert_embedding_dependency()
 
     def _assert_chat_dependency(self) -> None:
